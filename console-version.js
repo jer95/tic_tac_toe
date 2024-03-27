@@ -58,10 +58,8 @@ function Square() {
     let marker = null 
 
     const getMarker =  () => marker;
-
-    const resetMarker = () => marker = null;
     
-    return {getMarker,resetMarker}
+    return {getMarker}
 }
 
 
