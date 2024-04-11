@@ -4,8 +4,348 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="styles.css"/>
+    
 </head>
 <body>
+    <div id="sidebar" class="game-ctrl">
+        <p>Fill out fields and press play to begin 2 player mode.</p>
+        <p class="player">
+            <h3>Player 1</h3>
+            <label>Name:</label>
+            <input id="p1-name" type ="text" placeholder="Player 1"/>
+            <label>Marker:</label>
+            <select id="p1-marker" name="Marker">
+                <option value="X">X</option>
+                <option value="O">O</option>
+            </select>
+        </p>
+        <p class="player">
+            <h3>Player 2</h3>
+            <label>Name:</label>
+            <input id="p2-name" type="text" placeholder="Player 2"/>
+            <label>Marker:</label>
+            <select id="p2-marker" name="Marker">
+                <option value="O">O</option>
+                <option value="X">X</option>
+            </select>
+        </p>
+        <button id="playBtn">Play</button>
+        <button id="new-game" style="display: none;">New Game</button>
+        <button id="main-menu" style="display: none;">Main Menu</button>
 
+
+    </div>
+    <div class="gameboard">
+        <div class="row first-row">
+            <div data-row="0" data-col="0" class="square"></div>
+            <div data-row="0" data-col="1" class="square"></div>
+            <div data-row="0" data-col="2" class="square"></div>
+        </div>
+        <div class="row second-row">
+            <div data-row="1" data-col="0" class="square"></div>
+            <div data-row="1" data-col="1" class="square"></div>
+            <div data-row="1" data-col="2" class="square"></div>
+        </div>
+        <div class="row third-row">
+            <div data-row="2" data-col="0" class="square"></div>
+            <div data-row="2" data-col="1" class="square"></div>
+            <div data-row="2" data-col="2" class="square"></div>
+        </div>
+</div>
+    <div id="display">Press a square to begin playing against CPU.</div>
+    <script>
+
+    const playBtn = document.querySelector('#playBtn');
+    const display = document.querySelector('#display');
+    const newGame = document.querySelector('#new-game')
+    const mainMenu = document.querySelector('#main-menu')
+         
+    const gameSetup = (function (){
+
+    const board = []
+    const row = 3;
+    const col = 3;
+
+    for(let i = 0; i < row; i++){
+        board[i] = [];
+        for(let j = 0; j < col; j++){
+            board[i][j] = null;
+        }
+    }
+
+
+    const firstRow = document.querySelectorAll('.first-row .square')
+    const secondRow = document.querySelectorAll('.second-row .square')
+    const thirdRow = document.querySelectorAll('.third-row .square')
+
+    let gameBoard = [firstRow,secondRow,thirdRow];
+
+    let changeTurns = true;
+    const getChangeTurns = () => changeTurns;
+
+    let gameOver = false;
+    const gameStatus = () => gameOver === true ? gameOver = false : gameOver = true; 
+    const getGameStatus = () => gameOver;
+
+
+        const resetGameBoard = function () {
+            for(let row = 0; row < board.length; row++){
+                for(let col = 0; col < board.length; col++){
+                    board[row][col] = null;
+                    gameBoard.forEach((row) => row.forEach((square) => square.textContent = null))
+                }
+            }
+        }
+
+    const getGameBoard = () =>  gameBoard;
+    const getBoard = () => board;
+
+    return {getGameBoard,getBoard,getChangeTurns,resetGameBoard,gameStatus,getGameStatus};
+    })()
+
+
+
+
+const Players = function CreatePlayer(){
+
+let players = []
+
+const playerOneName = document.querySelector('#p1-name');
+const playerOneMarker = document.querySelector('#p1-marker')
+const playerTwoName = document.querySelector('#p2-name')
+const playerTwoMarker = document.querySelector('#p2-marker')
+
+
+    function Players(name,marker){
+        this.name = name;
+        this.marker = marker;
+    }
+
+    playerOneMarker.value === 'X' ? playerTwoMarker.value = 'O' : playerTwoMarker.value = 'X'  
+    playerOneName.value = playerOneName.value === "" ? playerOneName.value = "Player 1" : playerOneName.value;
+    playerTwoName.value = playerTwoName.value === "" ? playerTwoName.value = "Player 2" : playerTwoName.value;
+
+    players = [new Players(playerOneName.value,playerOneMarker.value),
+                new Players(playerTwoName.value,playerTwoMarker.value)]
+                    
+    const setPlayers = () => players;
+
+    return {setPlayers}
+
+    }
+
+
+
+    function GameController (){
+
+    const game = gameSetup;
+    
+    const square = document.querySelectorAll('.square')
+    
+    const gameBoard = game.getGameBoard();
+    const board = game.getBoard()
+    const gameBoardArr = game.getBoard()
+
+   
+    let players = [
+        {
+            name:'Player 1',
+            marker: 'X'
+        },
+        {
+            name: 'CPU',
+            marker: 'O',
+        }
+    ]
+
+    let playersTurn = players[0];
+    console.log(players)
+
+
+    function cpuTurn() {
+        let row;
+        let col;
+        let emptySquare = false;
+        do{
+         row = Math.floor(Math.random() * 3)            // CPU placeMarker function
+         col = Math.floor(Math.random() * 3)
+         console.log(row)
+         console.log(col)
+            if(board[row][col] === null){
+            placeMarker(row,col,playersTurn)
+            emptySquare = true;
+            }
+        } while (!emptySquare)
+    }
+
+    const getPlayers = (newPlayers) => {
+        players = newPlayers                        // gets players for 2 player option
+        playersTurn = players[0]
+    };
+
+    const resetPlayers = () => {
+        document.getElementById('p1-name').value = ''
+        document.getElementById('p2-name').value = ''
+        players = [
+        {
+            name:'Player 1',
+            marker: 'X'
+        },
+        {
+            name: 'CPU',
+            marker: 'O',
+        }
+    ]
+    playersTurn = players[0];
+    }
+
+    const changeTurns = () =>  playersTurn === players[0] ? playersTurn = players[1] : playersTurn = players[0];
+
+    
+    const placeMarker = (row,column,playersTurn) => {
+        if(board[row][column] === null){
+            board[row][column] = playersTurn.marker;
+            gameBoard[row][column].textContent = board[row][column];
+            changeTurns()
+        }
+        else {
+            display.textContent = `This square is not empty. Please try another square. It's still ${playersTurn.name} 's turn`
+    }
+}
+
+    function winCheck(){
+        for(let a = 0; a < players.length; a++) {       
+            for(let j = 0; j < gameBoardArr.length; j++){
+                if ((gameBoardArr[j][0] == players[a].marker &&
+                    gameBoardArr[j][1] == players[a].marker &&
+                    gameBoardArr[j][2] == players[a].marker) ||
+
+                    (gameBoardArr[0][j] == players[a].marker &&
+                    gameBoardArr[1][j] == players[a].marker &&
+                    gameBoardArr[2][j] == players[a].marker) ||
+
+                    (gameBoardArr[0][0] == players[a].marker &&
+                    gameBoardArr[1][1] == players[a].marker &&
+                    gameBoardArr[2][2] == players[a].marker) ||
+
+                    (gameBoardArr[0][2] == players[a].marker &&
+                    gameBoardArr[1][1] == players[a].marker &&
+                    gameBoardArr[2][0] == players[a].marker)) {
+
+                    display.textContent = `${players[a].name} you are the winner! Play Again?`
+                    const winningBoard = gameBoardArr.map((row) => row.map((square) => square))
+                    console.log(winningBoard)
+                    playersTurn = players[0]
+                    document.getElementById('sidebar').style.display = 'flex';
+                    game.gameStatus()
+                } 
+            }
+        }
+
+        const tie = gameBoardArr.every(row => row.every(square => square !== null))
+        console.log(tie)
+
+        if(tie && !game.getGameStatus()){
+            display.textContent = `Oops we have a tie! Play Again?`                    
+            playersTurn = players[0]                                                    
+            game.gameStatus()
+        }
+        if(!game.getGameStatus()){
+            display.textContent = `It's ${playersTurn.name}'s Turn`
+            console.log(gameBoardArr)
+        }
+    }
+
+    const playRound = (row,column,playersTurn) => {
+        placeMarker(row,column,playersTurn)
+        winCheck()
+    } 
+
+    mainMenu.addEventListener('click', () =>{
+        document.getElementById('sidebar').style.display = 'flex';
+        gameSetup.resetGameBoard()
+            console.log(gameSetup.getBoard())
+            display.textContent = ""
+            playBtn.innerHTML = "Play"
+            gameSetup.gameStatus()
+            mainMenu.style.display = 'none'
+            resetPlayers()
+            display.textContent = "Press a square to begin playing against CPU."
+            console.log(playersTurn)
+    })
+
+    square.forEach((square => {
+        square.addEventListener('click', () => {
+          const row = square.dataset.row;
+          const col = square.dataset.col;
+          console.log(game.getGameStatus())
+          if(!game.getGameStatus()){
+           document.getElementById('sidebar').style.display = 'none';
+           playRound(row,col,playersTurn)
+            if(game.getGameStatus()){
+                document.getElementById('sidebar').style.display = 'flex';             
+                playBtn.innerHTML = "Play Again"
+                if(!players.includes(players[1])){
+                newGame.style.display = 'inline-block'
+                }else{
+                mainMenu.style.display = 'inline-block'
+                }
+            }
+                   if(!game.getGameStatus() && playersTurn.name =='CPU') {
+                   cpuTurn()
+                    winCheck()
+                }
+
+                if(game.getGameStatus()){
+                    document.getElementById('sidebar').style.display = 'flex';
+                    playBtn.innerHTML = "Play Again"
+                    if(!players.includes(players[1])){
+                    newGame.style.display = 'inline-block'
+                    } else{
+                    mainMenu.style.display = 'inline-block'
+                    }
+                }
+            }
+        })
+    }))
+
+
+    return {getPlayers}
+}
+
+
+
+const round = GameController()
+
+playBtn.addEventListener('click', () => {
+        if(!gameSetup.getGameStatus()){
+        const createPlayers = Players()
+        const newPlayers = createPlayers.setPlayers()
+        round.getPlayers(newPlayers)
+        display.textContent = `It's ${newPlayers[0].name}'s turn`
+        document.getElementById('sidebar').style.display = 'none';
+        } else{
+            gameSetup.resetGameBoard()
+            console.log(gameSetup.getBoard())
+            display.textContent = ""
+            playBtn.innerHTML = "Play"
+            gameSetup.gameStatus()
+            document.getElementById('sidebar').style.display = 'none';
+        }
+    })
+
+    newGame.addEventListener('click', () => {
+        gameSetup.resetGameBoard()
+        display.textContent = ""
+        const createPlayers = Players()
+        const newPlayers = createPlayers.setPlayers()
+        round.getPlayers(newPlayers)
+        gameSetup.gameStatus()
+        document.getElementById('sidebar').style.display = 'none';
+    })
+
+    </script>
 </body>
+
 </html>
