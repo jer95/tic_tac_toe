@@ -1,0 +1,107 @@
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    height: 100vh;
+    background-color: burlywood;
+    margin: 0px;
+    padding: 5px;
+}
+
+
+.gameboard{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 35vw;
+    height: 70vh;
+}
+
+.row{
+    display:flex;
+    width: 100%;
+    
+}
+
+.row :last-child{
+    border-right:0px;
+}
+
+.third-row .square{
+   border-bottom: 0px;
+}
+
+.square{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 33.33%;
+    border-right: 3px solid rgb(6, 6, 32);
+    border-bottom: 3px solid rgb(6, 6, 32);
+    font-size: 38px;
+}
+
+.game-ctrl{
+    display: flex;
+    background-color: rgba(210, 105, 30, 0.534);
+    justify-content:space-between;
+    justify-self: flex-start;
+    flex-direction: column;
+    border: 2px solid rgb(24, 21, 18) ;
+    width: fit-content;
+    height: auto;
+    padding: 8px;
+    font-size: 18px;
+}
+
+.game-ctrl p{
+    width:30ch;
+    font-size: 20px;  
+    color: rgb(31, 10, 10);
+}
+
+input,select,label{
+    width: 200px;
+    margin-top: 2px;    
+}
+
+
+.player{
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    margin: 0px;
+    padding: 8px;
+    
+}
+
+#display{
+    height: 20vh;
+    width: auto;
+    line-height: 1.5em;
+    font-size: 24px;
+    color: rgb(31, 10, 10);
+}
+
+
+#playBtn,#main-menu{
+    height: 5vh;
+    width: 50%;
+    align-self: left;
+    background-color: bisque;
+    align-self: center;
+}
+
+
+.square:hover{
+    background-color:rgba(10, 33, 79, 0.2);
+    ;
+}
